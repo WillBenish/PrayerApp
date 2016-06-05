@@ -30,7 +30,9 @@ var path = require('path');
 	app.get('/', function(req, res) {
 			res.sendfile(path.join(__dirname, 'index.html')); // load the single view file (angular will handle the page changes on the front-end)
 		});
-	app.use(express.static('public'));
+	
+
+    app.use(express.static('public'));
 	
 	
 
@@ -45,7 +47,7 @@ var path = require('path');
 									   failureRedirect: '/login',
 									   failureFlash: true })
 		);
-
+   
 
 // configure app to use bodyParser()
 // this will let us get the data from a POST
