@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js"></script>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Optimize mobile viewport -->
+ <meta name="google-signin-scope" content="profile email">
+    <meta name="google-signin-client_id" content="610646934806-87sr6etbfu46kmep7bol9a3f7jnb3vv8.apps.googleusercontent.com">
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <title>Prayer App</title>
+
+    <!-- SCROLLS -->
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"><!-- load bootstrap -->
+    <style>
+        html                    { overflow-y:scroll; }
+        body                    { padding-top:50px; }
+        #prayer-list              { margin-bottom:30px; }
+    </style>
+
+    <!-- SPELLS -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script><!-- load jquery -->
+   
+</head>
+<body ng-controller="mainController">
+     <div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
+         <a href="#" onclick="signOut();">Sign out</a>
+
+    <div class="container">
+
+        <!-- HEADER AND TODO COUNT -->
+        <div class="jumbotron text-center">
+            <h1>Prayers <span class="label label-info">{{ prayers.length }}</span></h1>
+        </div>
+
+        <!-- TODO LIST -->
+		<div >
+ welcome {{ myUser }}
+
+                </div>
+        <table class="table">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Frequency</th>
+                    <th>Last Run</th>
+                    <th>Times Updated</th>
+                    <th>Description</th>
+                    <th>Delete</th>
+                  </tr>
+                </thead>
+            <tr ng-repeat="prayer in prayers">
+                <td><input type="checkbox" ng-click="updatePrayer(prayer)" > {{ prayer.name }}  
+                     </input></td>
+                <td>Every {{ prayer.frequency }} days</td>
+                <td> {{ prayer.lastRun }} </td>
+                <td> {{ prayer.totalUpdates }} </td>
+                <td> {{ prayer.description }} </td>
+                <td><span ng-click="deletePrayer(prayer._id)">Delete</span></td>
+            </tr>
+        </table>
+        <div id="prayer-list" class="row" style='display:none'>
+            <div class="col-sm-4 col-sm-offset-4">
+
+                <!-- LOOP OVER THE prayers IN $scope.todos -->
+                <div class="checkbox" ng-repeat="prayer in prayers">
+                    <label>
+                        <input type="checkbox" ng-click="updatePrayer(prayer)" >Name: {{ prayer.name }}  Frequency: {{ prayer.frequency }} Last Run: {{prayer.lastRun}} 
+                    
+                    </label>
+
+                </div>
+                <div class="checkbox" ng-repeat="prayer in prayers">
+
+                    <label>
+                        <input type="checkbox" ng-click="deletePrayer(prayer._id)" >Delete {{ prayer.name }}  
+                    
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- FORM TO CREATE TODOS -->
+        <div id="prayer-form" class="row">
+            <div class="col-sm-8 col-sm-offset-2 text-center">
+                <form>
+                    <div class="form-group">
+
+                        <!-- BIND THIS VALUE TO formData.name IN ANGULAR -->
+                        <input type="text" class="form-control input-lg text-center" placeholder="Enter New Prayer Here" ng-model="formData.name">
+                    </div>
+
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="chickenEgg" value="1" ng-model="formData.frequency">
+                            Daily
+                        </label>
+                    </div>
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="chickenEgg" value="7" ng-model="formData.frequency">
+                            Weekly
+                        </label>
+                    </div>
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="chickenEgg" value="30" ng-model="formData.frequency">
+                            Monthly
+                        </label>
+                    </div>
+
+
+                    <!-- createToDo() WILL CREATE NEW TODOS -->
+                    <div>  
+                        
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-lg" ng-click="addPrayer()">Add</button>
+                </form>
+            </div>
+
+            </div>
+        </div>
+
+    </div>
+
+<script>
+
+      function onSignIn(googleUser,$scope) {
+        // Useful data for your client-side scripts:
+        var profile = googleUser.getBasicProfile();
+        console.log("ID: " + profile.getId()); // Don't send this directly to your server!
+        console.log('Full Name: ' + profile.getName());
+        console.log('Given Name: ' + profile.getGivenName());
+        console.log('Family Name: ' + profile.getFamilyName());
+        console.log("Image URL: " + profile.getImageUrl());
+        console.log("Email: " + profile.getEmail());
+
+        // The ID token you need to pass to your backend:
+        var id_token = googleUser.getAuthResponse().id_token;
+        console.log("ID Token: " + id_token);
+
+
+  	  };
+        function signOut() {
+    var auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function () {
+      console.log('User signed out.');
+    });
+            
+        }
+
+
+  
+</script>
+<script>
+var app = angular.module('myApp', []);
+
+angular.module('myApp').component('prayerList'),{
+	template: 'Hello List',
+	controller: function PrayerListController(){
+		this.myUser='test';
+		}
+	}
+  
+  
+function mainController($scope,$http){
+    $scope.formData = {frequency:7};
+    
+    $http.get('/api/prayers')
+        .success(function(data){
+            $scope.prayers = data;
+            console.log(data);
+        })
+        .error(function(data){
+            console.log('Error: '+ data);
+        })
+	$scope.myUser = 'test';
+    
+    $scope.addPrayer = function() {
+        $http.post('/api/prayers',$scope.formData)
+            .success(function(data){
+                $scope.formData = {frequency:7};
+              //  $scope.prayers = data;
+                console.log(data);
+
+            $http.get('/api/prayers')
+            .success(function(data){
+                $scope.prayers = data;
+                console.log(data);
+            })
+            .error(function(data){
+                console.log('Error: '+ data);
+            })                
+            })
+            .error(function(data){
+                console.log('Error: ' + data);
+            });
+
+            
+    } ;   
+    
+    $scope.updatePrayer = function(updatedPrayer){
+
+        $http.put('/api/prayers/'+JSON.stringify(updatedPrayer))
+            .success(function(data){
+               //$scope.prayers = data;
+                console.log(data);
+            
+             $http.get('/api/prayers')
+                .success(function(data){
+                    $scope.prayers = data;
+                    console.log(data);
+                })
+                .error(function(data){
+                    console.log('Error: '+ data);
+                }) 
+            })
+            .error(function(data){
+                console.log('Error: ' +data);
+            })
+
+    }
+    $scope.deletePrayer = function(id){
+        $http.delete('/api/prayers/'+id)
+            .success(function(data){
+               //$scope.prayers = data;
+                console.log(data);
+
+
+                 $http.get('/api/prayers')
+                .success(function(data){
+                    $scope.prayers = data;
+                    console.log(data);
+                 })
+                .error(function(data){
+                    console.log('Error: '+ data);
+                })
+            })
+            .error(function(data){
+                console.log('Error: ' +data);
+            })
+     
+    }
+};
+/*
+app.factory("Prayer", function($resource){
+    return $resource("https://prayer2-willbenish.c9users.io/api/prayers/:id",{id:'@_id'},{
+        update: {
+                method: 'PUT' // This method issues a PUT request
+        }
+        
+    });
+});
+*/
+
+      
+
+
+</script>
+
+</body>
+</html>

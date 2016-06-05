@@ -1,0 +1,32 @@
+<div class="container-fluid">
+<table border = 1>
+<tr>
+<th>Component</th>
+<th>Value</th>
+</tr>
+<tr>
+<td>Name</td>
+<td>{{$ctrl.prayer.name}}</td>
+</tr>
+
+<tr>
+<td>Freq:
+</td>
+<td>{{$ctrl.prayer.frequency}}
+</td>
+</tr>
+
+<tr>
+<td>Last Run</td>
+<td>{{$ctrl.prayer.lastRun}}</td>
+</tr>
+
+<tr>
+<td>Total Updates</td>
+<td>{{$ctrl.prayer.totalUpdates}}</td>
+</tr>
+</table>
+
+<button type="submit" class="btn btn-primary btn-lg" ng-click="$ctrl.deletePrayer()">Delete</button>
+
+</div>

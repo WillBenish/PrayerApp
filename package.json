@@ -1,0 +1,20 @@
+{
+  "name": "prayerapp",
+  "version": "1.0.0",
+  "description": "Application built to manage a repository of user submitted prayers (in the form of a test string)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+	"start": "node index.js"
+  },
+  "author": "Will Benish",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.15.0",
+    "express": "^4.13.4",
+    "mongodb": "^2.1.16",
+    "mongoose": "^4.4.12",
+    "passport": "^0.3.2"
+  },
+  "engine": "node >= 4.4.3"
+}

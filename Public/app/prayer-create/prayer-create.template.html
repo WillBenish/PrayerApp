@@ -1,0 +1,41 @@
+ <!-- FORM TO CREATE TODOS -->
+        <div id="prayer-form" class="row">
+            <div class="col-sm-8 col-sm-offset-2 text-center">
+                <form>
+                    <div class="form-group">
+
+                        <!-- BIND THIS VALUE TO formData.name IN ANGULAR -->
+                        <input type="text" class="form-control input-lg text-center" placeholder="Enter New Prayer Here" ng-model="$ctrl.prayer.name">
+                    </div>
+
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="chickenEgg" value="1" ng-model="$ctrl.prayer.frequency">
+                            Daily
+                        </label>
+                    </div>
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="chickenEgg" value="7" ng-model="$ctrl.prayer.frequency">
+                            Weekly
+                        </label>
+                    </div>
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="chickenEgg" value="30" ng-model="$ctrl.prayer.frequency">
+                            Monthly
+                        </label>
+                    </div>
+
+
+                    <!-- createToDo() WILL CREATE NEW TODOS -->
+                    <div>  
+                        
+                    </div>
+                   
+                    <button type="submit" class="btn btn-primary btn-lg" ng-click="$ctrl.addPrayer()">Add</button>
+                </form>
+            </div>
+
+            </div>
+			
